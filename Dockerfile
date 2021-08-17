@@ -1,8 +1,16 @@
-FROM joyzoursky/python-chromedriver:3.9-alpine-selenium
+FROM python:3.9.6-alpine3.13
 
 ENV OPENCV_VERSION=4.5.3
 ENV CC /usr/bin/clang
 ENV CXX /usr/bin/clang++
+
+# update apk repo
+RUN echo "http://dl-4.alpinelinux.org/alpine/v3.13/main" >> /etc/apk/repositories && \
+    echo "http://dl-4.alpinelinux.org/alpine/v3.13/community" >> /etc/apk/repositories
+
+# install chromedriver
+RUN apk add --update --no-cache \
+        chromium chromium-chromedriver
 
 RUN apk add --update --no-cache \
         --virtual=.build-dependencies \
