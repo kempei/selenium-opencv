@@ -1,4 +1,8 @@
 version: 0.2
+env:
+    secrets-manager:
+        DOCKERHUB_USER: arn:aws:secretsmanager:ap-northeast-1:092507187565:secret:Docker-MOP44l:username
+        DOCKERHUB_PASS: arn:aws:secretsmanager:ap-northeast-1:092507187565:secret:Docker-MOP44l:password
 phases:
     install:
         commands:
@@ -7,6 +11,9 @@ phases:
         commands:
             - echo Logging in to Amazon ECR...
             - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+            # Docker Hub へのログイン
+            - echo Logging in to Docker Hub...
+            - echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
     build:
         commands:
             - echo Build started on `date`
